@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_REGISTRY = "dacru5110"
+        IMAGE_NAME = "frontend-challenge"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/sport-enlace-sas/frontend-challenge-base.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:latest .'
+                }
+            }
+        }
+        stage('Test Docker Image') {
+            steps {
+                script {
+                    sh 'docker run --rm $DOCKER_REGISTRY/$IMAGE_NAME:latest npm test'
+                }
+            }
+        }
+        stage('Push to Docker Registry') {
+            steps {
+                withDockerRegistry([credentialsId: 'dockerhub_access', url: '']) {
+                    sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME:latest'
+                }
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig-access', variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -f k8s/deployment.yaml'
+                }
+            }
+        }
+    }
+}
+
