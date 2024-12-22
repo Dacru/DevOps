@@ -1,7 +1,7 @@
 
 # 3. Solución de Problemas
 
-Basado en el siguiente docker compose: [docker-compose.yaml](https://gist.github.com/DevOps-Inlaze/c8b21828cdda0bd12eb67e052211616b.j), corregir el archivo que está mal construído y optimizado.
+Basado en el siguiente docker compose: [docker-compose.yaml](https://gist.github.com/DevOps-Inlaze/c8b21828cdda0bd12eb67e052211616b), corregir el archivo que está mal construído y optimizado.
 
 
 
